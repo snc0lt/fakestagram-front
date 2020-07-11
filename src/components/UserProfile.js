@@ -3,6 +3,25 @@ import { useParams } from "react-router-dom";
 import { UserContext } from "../App";
 import axios from 'axios'
 
+import { makeStyles } from '@material-ui/core/styles';
+import GridList from '@material-ui/core/GridList';
+import GridListTile from '@material-ui/core/GridListTile';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    overflow: 'hidden',
+    backgroundColor: theme.palette.background.paper,
+  },
+  gridList: {
+    width: '100%',
+    height: 450,
+    objectFit: 'cover'
+  },
+}));
+
 const styles = {
   img: {
     width: 180,
@@ -78,7 +97,11 @@ function Profile() {
     // setProfile(data)
     fetchData()
   }
+
+  const classes = useStyles();
+
   const { user, posts } = profile
+
   return user && Object.keys(user).length > 0 && posts ? (
     <div className='container'>
       <div className="row" style={{ borderBottom: '1px solid grey' }}>
@@ -119,7 +142,7 @@ function Profile() {
           </div>
         </div>
       </div>
-      <div className="row" style={styles.imageGalleryContainer}>
+      {/* <div className="row" style={styles.imageGalleryContainer}>
         <div className="col s12">
           {
             posts.map(item => {
@@ -133,6 +156,15 @@ function Profile() {
             })
           }
         </div>
+      </div> */}
+      <div className={classes.root}>
+        <GridList cellHeight={250} className={classes.gridList} cols={3}>
+          {posts.map((post) => (
+            <GridListTile key={post._id} cols={1}>
+              <img src={post.photo} alt='photo' />
+            </GridListTile>
+          ))}
+        </GridList>
       </div>
     </div>
   ) : (
